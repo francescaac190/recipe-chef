@@ -1,18 +1,31 @@
 // form con action en lugar de onSubmit
 
 import React from "react"
+import Recipe from "./Recipe"
+import Ready from "./Ready"
+import { preconnect } from "react-dom";
 export default function Main() {
 
 
-    const [ingredients, setIngredients] = React.useState([])
+    const [ingredients, setIngredients] = React.useState([
+        "all the main spices", "pasta", "ground beef", "tomate paste"
+    ])
+
+    const [recipeShown, setRecipeShown] = React.useState(false)
+
 
     const ingredientsListItems = ingredients.map(ingredient => (
         <li key={ingredient}>{ingredient}</li>
     ))
 
     function addIngredient(formData) {
+        event.preventDefault(); // Evita que la página se recargue
         const newIngredient = formData.get("ingredient");
         setIngredients(prevIngredients => [...prevIngredients, newIngredient])
+    }
+
+    function toggleRecipeShown() {
+        setRecipeShown(prevShown => !prevShown)
     }
 
     return (
@@ -29,9 +42,12 @@ export default function Main() {
                 
             </form>
 
-            <ul>
-                {ingredientsListItems}
-            </ul>
+            
+            <Ready ingredients={ingredients} toggleRecipeShown={toggleRecipeShown} />
+
+
+            { recipeShown && <Recipe />}
+
         </main>
     )
 }
